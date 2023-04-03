@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: insecure-registry
+  name: insecure-registry
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: insecure-registry
+  template:
+    metadata:
+      labels:
+        app: insecure-registry
+    spec:
+      containers:
+      - name: registry
+        image: registry:2
+        ports:
+        - containerPort: 5000
+        volumeMounts:
+        - name: registry-data
+          mountPath: /var/lib/registry
+          subPath: registry
+      volumes:
+      - name: registry-data
+        persistentVolumeClaim:
+          claimName: registry-data-pvc
